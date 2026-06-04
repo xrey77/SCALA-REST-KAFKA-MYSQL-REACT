@@ -1,12 +1,12 @@
-// src/main/scala/models/User.scala
+// app/models/User.scala
 package models
 
-import java.util.UUID
 import java.time.Instant
 
 case class User(
-  id: UUID,
-  departmentId: UUID,
+  id: Int,
+  roleId: Int,
+  departmentId: Int,
   firstname: String,
   lastname: String,
   email: String,   
@@ -16,8 +16,9 @@ case class User(
   userpic: String = "pix.png",  
   isActive: Boolean = true,
   isBlocked: Boolean = false,
+  mailtoken: Int,
   secret: Option[String] = None,     
-  qrcodeurl: Option[String] = None,  
-  createdAt: Instant = Instant.now(),
-  updatedAt: Instant = Instant.now()
+  qrcodeurl: Option[String] = None
+  // createdAt: Instant,
+  // updatedAt: Instant   
 )
