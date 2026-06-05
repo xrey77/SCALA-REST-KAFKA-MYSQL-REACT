@@ -2,6 +2,7 @@
 package models
 
 import java.time.Instant
+import play.api.libs.json._
 
 case class User(
   id: Int,
@@ -22,3 +23,34 @@ case class User(
   // createdAt: Instant,
   // updatedAt: Instant   
 )
+
+object User {
+  implicit val userFormat: Format[User] = Json.format[User]
+}
+
+case class UserProfile(
+  id: Int,
+  firstname: String,
+  lastname: String,
+  mobile: String,
+)
+
+object UserProfile {
+  implicit val userProfileFormat: OFormat[UserProfile] = Json.format[UserProfile]
+}
+
+
+case class MfaActivationResult(
+  user: User, 
+  qrCodeUrl: Option[String]
+)
+
+
+// case class UpdatePassword(
+//   id: Int,
+//   password: String
+// )
+
+// object UpdatePassword {
+//   implicit val format: OFormat[UpdatePasswordRequest] = Json.format[UpdatePasswordRequest]
+// }

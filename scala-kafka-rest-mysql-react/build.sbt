@@ -3,6 +3,14 @@ organization := "com.scala"
 
 version := "1.0-SNAPSHOT"
 
+javaOptions += "-Djava.awt.headless=true"
+run / fork := true
+test / fork := true
+
+
+PlayKeys.devSettings += "java.awt.headless" -> "true"
+
+
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.13.18"
@@ -18,7 +26,11 @@ libraryDependencies ++= Seq(
   "org.playframework" %% "play-slick" % "6.1.0",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.15.2",
   "com.github.jwt-scala" %% "jwt-circe" % "10.0.0",
-  "io.circe" %% "circe-generic" % "0.14.9"
+  "io.circe" %% "circe-generic" % "0.14.9",
+  "com.google.zxing" % "core" % "3.5.3",
+  "com.google.zxing" % "javase" % "3.5.3",
+  "org.typelevel" %% "cats-effect" % "3.5.4",
+   "dev.samstevens.totp" % "totp" % "1.7.1"
 )
 
 // for migration

@@ -1,8 +1,14 @@
 
-GET     /                           controllers.HomeController.index()
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-POST    /api/v1/register            controllers.RegisterController.create()
-POST    /api/v1/login               controllers.LoginController.signin()
+GET     /                               controllers.HomeController.index()
+GET     /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
+POST    /api/v1/register                controllers.RegisterController.create()
+POST    /api/v1/login                   controllers.LoginController.signin()
+GET     /api/v1/getuserbyid/:id         controllers.UserController.get(id: Int)
+GET     /api/v1/getusers/:page/:size    controllers.UserController.list(page: Int, size: Int)
+DELETE  /api/v1/deluser/:id             controllers.UserController.delete(id: Int)
+PATCH  /api/v1/updateuser/:id           controllers.UserController.updateuser(id: Int)
+PATCH  /api/v1/changepassword/:id       controllers.UserController.updatePassword(id: Int)
+PATCH  /api/v1/activatemfa/:id          controllers.MfaController.activatemfa(id: Int)
 
-# GET     /api/v1/users/:id           controllers.UserController.get(id: Long)
-# POST    /api/v1/users               controllers.UserController.create()
+
+
