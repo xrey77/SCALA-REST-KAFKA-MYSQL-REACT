@@ -49,9 +49,6 @@ class MfaRepositoryImpl @Inject()(
         val query = users.filter(_.id === id).map(u => (u.secret, u.qrcodeurl))
         
         val updateAction = query.update((Some(secret), Some(qrcodeurl)))
-        // db.run(updateAction).map { rowsUpdated =>
-        //     if (rowsUpdated > 0) Some(qrcodeurl) else None
-        // }
         db.run(updateAction).flatMap { rowsUpdated =>
             if (rowsUpdated > 0) {
                 db.run(users.filter(_.id === id).result.headOption)
@@ -60,17 +57,6 @@ class MfaRepositoryImpl @Inject()(
             }
         }
     }
-
-    // def verifyOtp(
-    //     id: Int, 
-    //     oto: String
-    // ): Future[User] = {
-    //     db.run(query).map { rowsAffected =>
-    //     if (rowsAffected > 0) user.copy(id = id)
-    //     else throw new Exception(s"User with id $id not found")        
-        
-    // }
-
 
     override def findUserById(id: Int): Future[Option[User]] = {
         db.run(users.filter(_.id === id).result.headOption)    

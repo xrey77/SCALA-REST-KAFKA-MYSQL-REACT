@@ -4,8 +4,8 @@ organization := "com.scala"
 version := "1.0-SNAPSHOT"
 
 javaOptions += "-Djava.awt.headless=true"
-run / fork := true
-test / fork := true
+// run / fork := true
+// test / fork := true
 
 
 PlayKeys.devSettings += "java.awt.headless" -> "true"

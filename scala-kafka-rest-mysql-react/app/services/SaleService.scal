@@ -1,0 +1,22 @@
+// app/services/ProductService.scala
+package services
+
+import javax.inject._
+import scala.concurrent.{ExecutionContext, Future}
+mport models.Sale
+import repositories.SaleRepository
+
+trait ProductService {
+    def listSalesdata(): Future[Seq[Sale]]
+}
+
+@Singleton
+class SaleServiceImpl @Inject()(
+  saleRepository: SaleRepository
+)(implicit ec: ExecutionContext) extends SaleService {
+
+  override def listSalesdata(): Future[Seq[Sale]] = {
+    saleRepository.salesList()
+  }
+
+}

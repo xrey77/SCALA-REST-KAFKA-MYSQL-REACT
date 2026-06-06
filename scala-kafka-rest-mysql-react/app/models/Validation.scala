@@ -1,0 +1,7 @@
+package models
+
+sealed trait OtpValidationError
+case object UserNotFound extends OtpValidationError
+case object MfaNotConfigured extends OtpValidationError
+case object InvalidOtpCode extends OtpValidationError
+case object OtpExpired extends OtpValidationError
