@@ -7,6 +7,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import slick.jdbc.JdbcProfile
 import models.User
 import models.UserProfile
+import models.UserProfilepic
 import java.time.Instant
 
 
@@ -16,6 +17,7 @@ trait UserRepository {
   def updateProfile(id: Int, user: UserProfile): Future[UserProfile]
   def delete(id: Int): Future[Boolean]
   def changePassword(id: Int, password: String): Future[User]
+  def updateUserpic(id: Int, userpic: String): Future[UserProfilepic]
 }
 
 @Singleton
@@ -83,5 +85,20 @@ class UserRepositoryImpl @Inject()(
 
   override def delete(id: Int): Future[Boolean] = {
     db.run(users.filter(_.id === id).delete).map(_ > 0)
+  }
+
+  override def updateUserpic(id: Int, userpic: String): Future[UserProfilepic] = {
+    val updateAction = users.filter(_.id === id).map(_.userpic).update(userpic)
+    
+    db.run(updateAction).map { rowsAffected =>
+      if (rowsAffected > 0) {
+        UserProfilepic(
+          id = id,
+          userpic = userpic
+        )
+      } else {
+        throw new Exception(s"User with id $id not found. No rows updated.")
+      }
+    }
   }
 }

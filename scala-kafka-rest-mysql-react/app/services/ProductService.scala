@@ -51,8 +51,9 @@ class ProductServiceImpl @Inject()(
         productpicture = request.productpicture,
         alertstocks = request.alertstocks,
         criticalstocks = request.criticalstocks
-    )
-    productRepository.addProduct(newProduct)    
+      )
+
+      productRepository.addProduct(newProduct)    
   }  
 
   override def updateProduct(id: Int, request: CreateProductRequest): Future[Option[Product]] = {

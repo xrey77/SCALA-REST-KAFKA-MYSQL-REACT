@@ -18,3 +18,4 @@ DELETE  /api/v1/deleteproduct/:id           controllers.ProductController.delete
 PATCH   /api/v1/updateproduct/:id           controllers.ProductController.updateProduct(id: Int)
 GET     /api/v1/productbycategory           controllers.ProductController.getProductCategory()
 GET     /api/v1/saleslist                   controllers.SaleController.listsalesdata()
+PATCH   /api/v1/uploadprofilepic/:id        controllers.UserController.uploadImage(id: Int)

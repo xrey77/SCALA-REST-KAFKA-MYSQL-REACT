@@ -5,9 +5,10 @@ import javax.inject._
 import scala.concurrent.{ExecutionContext, Future}
 import models.User
 import models.UserProfile
+import models.UserProfilepic
 import dtos.UpdateProfileRequest
 import repositories.UserRepository
-import security.PasswordHasher
+import security.BCryptPasswordHasher
 
 trait UserService {
   def listUsers(page: Int, size: Int): Future[Seq[User]]
@@ -15,12 +16,13 @@ trait UserService {
   def updateUserProfile(id: Int, request: UpdateProfileRequest): Future[Option[UserProfile]]
   def updateUserPassword(id: Int, password: String): Future[Option[User]]
   def deleteUser(id: Int): Future[Boolean]
+  def updateProfilePicture(id: Int, userpic: String): Future[Option[UserProfilepic]]
 }
 
 @Singleton
 class UserServiceImpl @Inject()(
   userRepository: UserRepository,
-  passwordService: PasswordHasher
+  passwordService: BCryptPasswordHasher
 )(implicit ec: ExecutionContext) extends UserService {
 
   override def listUsers(page: Int, size: Int): Future[Seq[User]] = {
@@ -52,9 +54,18 @@ class UserServiceImpl @Inject()(
     }
   }
 
-
-
   override def deleteUser(id: Int): Future[Boolean] = {
     userRepository.delete(id)
   }
+
+  override def updateProfilePicture(id: Int, userpic: String): Future[Option[UserProfilepic]] = {
+    userRepository.findById(id).flatMap {
+      case Some(existing) =>
+        userRepository.updateUserpic(id, userpic).map(Some(_))        
+      case None => Future.successful(None)
+    }
+  }
+
+
+
 }

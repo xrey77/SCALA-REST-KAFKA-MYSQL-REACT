@@ -40,17 +40,17 @@ object UserProfile {
 }
 
 
+case class UserProfilepic(
+  id: Int,
+  userpic: String,
+)
+
+object UserProfilepic {
+  implicit val userProfilepicFormat: OFormat[UserProfilepic] = Json.format[UserProfilepic]
+}
+
+
 case class MfaActivationResult(
   user: User, 
   qrCodeUrl: Option[String]
 )
-
-
-// case class UpdatePassword(
-//   id: Int,
-//   password: String
-// )
-
-// object UpdatePassword {
-//   implicit val format: OFormat[UpdatePasswordRequest] = Json.format[UpdatePasswordRequest]
-// }

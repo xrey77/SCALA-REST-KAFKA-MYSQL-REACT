@@ -3,6 +3,27 @@
 <p>SCALA = SCALLABLE LANGUAGE<br/>
 SBT = SIMPLE BUILD TOOLS</p>
 
+<h4>Dependencies</h4>
+<p>1. Java 21 Temurin</p>
+<p>2. Scala v2.13.18</p>
+<p>3. sbt v1.12.11</p>
+<p>4. Confluent Kafka, kafka-clients v3.6.1</p>
+<p>5. MySQL Connector, mysql-connector-j v9.1.0</p>
+<p>6. PlayFramework, play-slick v6.1.0</p>
+<p>7. Json WebToken, jwt-circe v10.0.0</p>
+
+
+<h4>Features</h4>
+<p>1. User Registration and User Login</p>
+<p>2. Authentication and Authorization</p>
+<p>3. Multi-Factor Authenticator / TOTP</p>
+<p>4. Upload Profile Picture</p>
+<p>5. Product List pagination</p>
+<p>6. Product Search pagination</p>
+<p>7. Annual Sales Graph Report</p>
+<p>8. Product Master Details Report</p>
+
+
 <h4>sbt Reference Manual</h4>
 
 <p>sbt is a build tool for Scala, Java, and more. It requires Java 1.8 or later.</p>

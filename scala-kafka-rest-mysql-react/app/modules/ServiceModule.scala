@@ -7,6 +7,9 @@ import services._
 import repositories._
 import security.{PasswordHasher, BCryptPasswordHasher, QrcodeGenerator}
 
+import com.google.inject.{AbstractModule, Scopes}
+import services.KafkaProducerService
+
 class ServiceModule(environment: Environment, configuration: Configuration) extends AbstractModule {
   override def configure(): Unit = {
     bind(classOf[AuthService]).to(classOf[AuthServiceImpl])
@@ -27,6 +30,7 @@ class ServiceModule(environment: Environment, configuration: Configuration) exte
     bind(classOf[PasswordHasher]).to(classOf[BCryptPasswordHasher])    
     bind(classOf[QrcodeGenerator]).asEagerSingleton()
 
-
+    bind(classOf[KafkaProducerService]).in(Scopes.SINGLETON)
   }
+
 }

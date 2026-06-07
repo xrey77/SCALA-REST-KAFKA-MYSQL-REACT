@@ -1,3 +1,4 @@
+// app/infrastructure/BCryptPasswordHasher.scala
 package infrastructure
 
 import security.PasswordHasher

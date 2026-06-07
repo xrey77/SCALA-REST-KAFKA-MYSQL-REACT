@@ -18,14 +18,6 @@ object JwtUtil {
   private val algorithm = JwtAlgorithm.HS256
   implicit val clock: Clock = Clock.systemUTC()
 
-
-
-  // private val config = ConfigFactory.load()
-  // private val secretKey = config.getString("jwt.secret")
-  // private val expireInSeconds = config.getLong("jwt.expireInSeconds")
-  // private val algorithm = JwtAlgorithm.HS256  
-  // implicit val clock: Clock = Clock.systemUTC()
-
   def generateToken(userId: Long, email: String): String = {
     val content = TokenContent(userId, email).asJson.noSpaces
     val claim = JwtClaim(content)

@@ -10,10 +10,19 @@ import models.User
 import dtos.UpdateProfileRequest
 import dtos.UpdatePasswordRequest
 
+import play.api.Environment
+import java.io.File
+import java.nio.file.Paths
+import org.apache.commons.io.FilenameUtils
+
+import security.{AuthenticatedAction, TokenContent}
+
 @Singleton
 class UserController @Inject()(
   val controllerComponents: ControllerComponents,
-  userService: UserService
+  authAction: AuthenticatedAction,
+  userService: UserService,
+  env: Environment
 )(implicit ec: ExecutionContext) extends BaseController {
 
   // GET /api/v1/getusers/1/10
@@ -30,7 +39,7 @@ class UserController @Inject()(
   }
 
   // GET /api/v1/getuserbyid/:id
-  def get(id: Int): Action[AnyContent] = Action.async {
+  def get(id: Int): Action[AnyContent] = authAction.async {
     userService.getUserid(id).map {
       case Some(user) => Ok(Json.toJson(user))
       case None => NotFound(Json.obj("message" -> "User not found", "id" -> id))
@@ -39,7 +48,7 @@ class UserController @Inject()(
 
 
   // PATCH /api/v1/updateuser/:id
-  def updateuser(id: Int): Action[JsValue] = Action.async(parse.json) { request =>
+  def updateuser(id: Int): Action[JsValue] = authAction.async (parse.json) { request =>
     request.body.validate[UpdateProfileRequest] match {
       case JsSuccess(updateRequest, _) =>
         userService.updateUserProfile(id, updateRequest).map {
@@ -55,7 +64,7 @@ class UserController @Inject()(
 
 
   // PATCH /api/v1/changepassword/:id
-  def updatePassword(id: Int): Action[JsValue] = Action.async(parse.json) { request =>
+  def updatePassword(id: Int): Action[JsValue] = authAction.async (parse.json) { request =>
     request.body.validate[UpdatePasswordRequest] match {
       case JsSuccess(updateRequest, _) =>
         userService.updateUserPassword(id, updateRequest.password).map {
@@ -71,10 +80,34 @@ class UserController @Inject()(
 
 
 //   // DELETE /api/v1/deluser/:id
-  def delete(id: Int): Action[AnyContent] = Action.async {
+  def delete(id: Int): Action[AnyContent] = authAction.async {
     userService.deleteUser(id).map {
-      case true => NoContent
+      case true  => Ok(Json.obj("message" -> s"User ID: $id has been deleted successfully."))
       case false => NotFound(Json.obj("message" -> "User not found"))
     }
   }
+
+  def uploadImage(id: Int): Action[MultipartFormData[play.api.libs.Files.TemporaryFile]] = authAction.async(parse.multipartFormData) { request =>
+    request.body.file("userpic") match {
+      case Some(imageFile) =>
+        val filename = Paths.get(imageFile.filename).getFileName.toString
+        val extension = FilenameUtils.getExtension(filename)
+        val targetDirectory = new File(env.rootPath, "public/users")
+        if (!targetDirectory.exists()) targetDirectory.mkdirs()
+
+        val newFilename = s"00${id}.${extension}" 
+        val destination = new File(targetDirectory, newFilename)
+        imageFile.ref.copyTo(destination, replace = true)
+        userService.updateProfilePicture(id, newFilename)
+        Future.successful(
+          Ok(Json.obj("message" -> "You have changed your profile picture successfully.", "userpic" -> newFilename))
+        )
+
+      case None =>
+        Future.successful(
+          BadRequest("Missing file with key 'image'")
+        )        
+    }
+  }
+
 }

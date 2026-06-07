@@ -37,7 +37,8 @@ class ProductRepositoryImpl @Inject()(
   class CategoriesTable(tag: Tag) extends Table[Category](tag, "categories") {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def name = column[String]("name")
-    def * = (id, name) <> (Category.tupled, Category.unapply)
+    // def * = (id, name) <> (Category.tupled, Category.unapply)
+    def * = (id, name) <> ((Category.apply _).tupled, Category.unapply)    
   }
 
   class ProductsTable(tag: Tag) extends Table[Product](tag, "products") {
@@ -132,31 +133,6 @@ class ProductRepositoryImpl @Inject()(
   override def deleteProduct(id: Int): Future[Boolean] = {
     db.run(products.filter(_.id === id).delete).map(_ > 0)
   }
-
-
-// def fetchMasterDetails(): Future[List[CategoryWithProducts]] = {
-//   val query = categories
-//     .join(products)
-//     .on(_.id === _.categoryId)
-//     .map { case (cat, prod) => 
-//       (cat.name, prod.id, prod.descriptions, prod.qty, prod.unit, prod.costprice, prod.sellprice) 
-//     }
-
-//   db.run(query.result).map { rawRows =>
-//     // 1. Group the flat rows by the category name
-//     rawRows.groupBy(_._1).map { case (categoryName, rowsForCategory) =>
-      
-//       // 2. Map each row in the group to a ProductDetail object
-//       val productDetails = rowsForCategory.map { case (_, id, desc, qty, unit, cost, sell) =>
-//         ProductDetail(id, desc, qty, unit, cost, sell)
-//       }.toList
-
-//       // 3. Create the CategoryWithProducts using the 2 expected arguments
-//       CategoryWithProducts(categoryName, productDetails)
-//     }.toList
-//   }
-// }
-
 
   def fetchMasterDetails(): Future[List[CategoryWithProducts]] = {
     val query = categories

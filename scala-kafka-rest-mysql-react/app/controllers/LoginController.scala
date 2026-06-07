@@ -29,7 +29,7 @@ class LoginController @Inject()(
                     
                         val tokenResult = Right(JwtUtil.generateToken(user.id, user.email))
 
-                        authService.signinUser(dto.password, user.password).map { isValid =>
+                        authService.signinUser(user.id.toString(), dto.password, user.password).map { isValid =>
                             if (isValid) {
                                 val tokenString = tokenResult.getOrElse("") 
                                 Ok(Json.obj(
